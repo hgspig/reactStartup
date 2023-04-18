@@ -1,6 +1,25 @@
 import React from 'react';
+import "./about.css";
 
 export function About() {
+  const [quote, setQuote] = React.useState('Loading...');
+  const [quoteAuthor, setQuoteAuthor] = React.useState('unknown');
+
+  React.useEffect(() => {
+    const random = Math.floor(Math.random() * 1000);
+
+    fetch('https://api.quotable.io/random')
+      .then((response) => response.json())
+      .then((data) => {
+        setQuote(data.content);
+        setQuoteAuthor(data.author);
+      })
+      .catch();
+  }, []);
+
+
+
+
   return (
     <main className='container-fluid removescrolling-sm removescrolling'>
       <div className="container py-5 h-100">
@@ -28,19 +47,13 @@ export function About() {
             </div>
           </div>
           <div className="row col-xl-10">
-            <div
-              className="shadow-lg card second-color"
-            >
-              <div className="row g-0">
-                <div className="d-flex align-items-center">
-                  <div className="card-body p-4 p-lg-3 text-black">
-                    <div id="quote" className="quote-box"></div>
+                <div className="card-body p-4 p-lg-3 text-black row g-0 d-flex align-items-center shadow-lg card second-color">
+                            <div className='quote-box'>
+                              <p className='quote'>{quote}</p>
+                              <p className='author'>{quoteAuthor}</p>
+                            </div>
                   </div>
-                </div>
-              </div>
             </div>
-          </div>
-
         </div>
       </div>
     </main>
