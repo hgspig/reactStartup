@@ -1,0 +1,85 @@
+.playerName {
+  color: rgb(118, 190, 210);
+  font-size: 1.5em;
+  padding: 0.5em;
+}
+.first-color {
+  background-color: #918FFF;
+}
+.second-color {
+    background-color: #FF9D82;
+}
+
+.third-color {
+    background-color: #5DDDE8;
+}
+.min-height {
+    min-height: 90vh; /* with calc function subtract the header height */
+}
+.footerflex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-top: auto;
+}
+@media (max-width: 768px) {
+    .footerflex {
+        flex-direction: column;
+        justify-content: center;
+        margin-top: auto;
+    }
+    .removescrolling-sm {
+        height:81vh; 
+    }
+}
+    
+ @media (min-width: 768px){
+    .removescrolling {
+         height:83vh; 
+    }
+}
+.progresscardflex {
+    max-width: 90vw;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.overflowfix {
+    overflow-x: hidden;
+}
+
+@media (min-height: 800px) { 
+    /* height:120vh; add a tag */
+}
+.done {
+    color: #c4c3c2;
+    text-decoration: line-through;
+}
+.delete {
+    display: none!important;
+}
+.deleteButton {
+    background: none;
+    border: none;
+    float: right;
+    color: black;
+    font-weight: 400;
+    font-size: .9em;
+}
+.cards-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    height : 100vh;
+}
+
+.author::before {
+    content: " - ";
+  }
+
+.footer-color {
+    background-color: #A7A7A7;
+}

@@ -1,12 +1,38 @@
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+
 import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 import { Login } from "./login/login";
 import { Stats } from "./stats/stats";
 import { List } from "./list/list";
 import { About } from "./about/about";
+import { AuthState } from "./login/authState";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
+  const [userName, setUserName] = React.useState(
+    localStorage.getItem("userName")
+  );
+  const [authState, setAuthState] = React.useState(AuthState.Unknown);
+  React.useEffect(() => {
+    if (userName) {
+      fetch(`/api/user/${userName}`)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          }
+        })
+        .then((user) => {
+          const state = user?.authenticated
+            ? AuthState.Authenticated
+            : AuthState.Unauthenticated;
+          setAuthState(state);
+        });
+    } else {
+      setAuthState(AuthState.Unauthenticated);
+    }
+  }, [userName]);
+
   return (
     <BrowserRouter>
       <div class="top overflowfix">
@@ -31,16 +57,28 @@ function App() {
                   id="navbarSupportedContent"
                 >
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                      <NavLink class="nav-link " aria-current="page" to="list">
-                        To-Do
-                      </NavLink>
-                    </li>
-                    <li class="nav-item">
-                      <NavLink class="nav-link " aria-current="page" to="stats">
-                        Stats
-                      </NavLink>
-                    </li>
+                    {authState === AuthState.Authenticated && (
+                      <li class="nav-item">
+                        <NavLink
+                          class="nav-link "
+                          aria-current="page"
+                          to="list"
+                        >
+                          To-Do
+                        </NavLink>
+                      </li>
+                    )}
+                    {authState === AuthState.Authenticated && (
+                      <li class="nav-item">
+                        <NavLink
+                          class="nav-link "
+                          aria-current="page"
+                          to="stats"
+                        >
+                          Stats
+                        </NavLink>
+                      </li>
+                    )}
                     <li class="nav-item">
                       <NavLink class="nav-link " aria-current="page" to="about">
                         About
@@ -56,7 +94,20 @@ function App() {
           </header>
 
           <Routes>
-            <Route path="/" element={<Login />} exact />
+            <Route
+              path="/"
+              element={
+                <Login
+                  userName={userName}
+                  authState={authState}
+                  onAuthChange={(userName, authState) => {
+                    setAuthState(authState);
+                    setUserName(userName);
+                  }}
+                />
+              }
+              exact
+            />
             <Route path="/list" element={<List />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/about" element={<About />} />
